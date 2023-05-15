@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:tetris_game/constant/value.dart';
 
 class Piece {
@@ -10,6 +11,12 @@ class Piece {
 
   // the piece is just a list of integers
   List<int> position = [];
+
+  // color of tetris piece
+  Color get color {
+    return tetrominoColors[type] ??
+        const Color(0xffffffff); // Default to white if no color is found
+  }
 
   // generate the integers
   void initializePiece() {
