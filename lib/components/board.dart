@@ -32,7 +32,7 @@ class GameBoard extends StatefulWidget {
 
 class _GameBoardState extends State<GameBoard> {
   // current tetris piece
-  Piece currentPiece = Piece(type: Tetromino.T);
+  Piece currentPiece = Piece(type: Tetromino.L);
 
   @override
   void initState() {
@@ -85,9 +85,16 @@ class _GameBoardState extends State<GameBoard> {
         row += 1;
       }
 
-      // check the piece is out of the bounds (either two low or too far to the right and left)
+      // check the piece is out of the bounds (either two low or too far to the left and right)
       if (row >= colLength || col < 0 || col >= rowLength) {
         return true;
+      }
+
+      // Check if the current position is already occupied by another piece in the game board
+      if (row >= 0 && col >= 0) {
+        if (gameBoard[row][col] != null) {
+          return true;
+        }
       }
     }
     // if no collisions are detected, return false\
@@ -123,13 +130,39 @@ class _GameBoardState extends State<GameBoard> {
     currentPiece.initializePiece();
   }
 
+  // moveLeft
+  void moveLeft() {
+    // make sure the move is valid before we move that
+    if (!checkCollision(Direction.left)) {
+      setState(() {
+        currentPiece.movePiece(Direction.left);
+      });
+    }
+  }
+
+  // moveRight
+  void moveRight() {
+    // make sure the move is valid before we move that
+    if (!checkCollision(Direction.right)) {
+      setState(() {
+        currentPiece.movePiece(Direction.right);
+      });
+    }
+  }
+
+  // rotate piece
+  void rotatePiece() {
+    setState(() {
+      currentPiece.rotatePiece();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Column(
         children: [
-
           // GAME BOARD
           Expanded(
             child: GridView.builder(
@@ -165,6 +198,37 @@ class _GameBoardState extends State<GameBoard> {
                   );
                 }
               },
+            ),
+          ),
+
+          // GAME CONTROLLERS
+          Padding(
+            padding: const EdgeInsets.only(bottom: 50.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // left
+                IconButton(
+                  onPressed: moveLeft,
+                  icon: const Icon(
+                    Icons.arrow_back_ios_rounded,
+                    color: Colors.white,
+                  ),
+                ),
+
+                // rotate
+                IconButton(
+                  onPressed: rotatePiece,
+                  icon: const Icon(Icons.rotate_right, color: Colors.white),
+                ),
+
+                // right
+                IconButton(
+                  onPressed: moveRight,
+                  icon: const Icon(Icons.arrow_forward_ios_rounded,
+                      color: Colors.white),
+                ),
+              ],
             ),
           ),
         ],
