@@ -10,6 +10,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Tetris Game',
+      theme: ThemeData.dark(
+        useMaterial3: true,
+      ),
       debugShowCheckedModeBanner: false,
       home: GameBoard(),
     );

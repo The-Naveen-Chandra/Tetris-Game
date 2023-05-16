@@ -122,29 +122,20 @@ class _GameBoardState extends State<GameBoard> {
     // start game again
     startGame();
   }
+
   void resetGameButton() {
-  // Clear the game board
-  gameBoard = List.generate(
-    colLength,
-    (i) => List.generate(
-      rowLength,
-      (j) => null,
-    ),
-  );
+    // clear the game board
+    gameBoard = List.generate(
+      colLength,
+      (i) => List.generate(
+        rowLength,
+        (j) => null,
+      ),
+    );
 
-  // Reset game state
-  gameOver = false;
-  currentScore = 0;
-
-  // Create a new piece
-  createNewPiece();
-
-  // Start the game again
-  startGame();
-
-  // Close any existing dialog
-  Navigator.pop(context);
-}
+    currentScore = 0;
+    createNewPiece();
+  }
 
   // check for collision in a future position
   // return true -> there is collision
