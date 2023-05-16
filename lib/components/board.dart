@@ -37,6 +37,9 @@ class _GameBoardState extends State<GameBoard> {
   // current score
   int currentScore = 0;
 
+  // game over status
+  bool gameOver = false;
+
   @override
   void initState() {
     super.initState();
@@ -65,12 +68,83 @@ class _GameBoardState extends State<GameBoard> {
           // check landing
           checkLanding();
 
+          // check if game is over
+          if (gameOver == true) {
+            timer.cancel();
+            showGameOverDialog();
+          }
+
           // move the piece down
           currentPiece.movePiece(Direction.down);
         });
       },
     );
   }
+
+  // Game over Dialog
+  void showGameOverDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("GAME OVER"),
+        content: Text("Your score is : $currentScore"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              resetGame();
+              Navigator.pop(context);
+            },
+            child: Text("Play Again"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // reset game
+  void resetGame() {
+    // clear the game board
+    gameBoard = List.generate(
+      colLength,
+      (i) => List.generate(
+        rowLength,
+        (j) => null,
+      ),
+    );
+
+    // new game
+    gameOver = false;
+    currentScore = 0;
+
+    // create a new piece
+    createNewPiece();
+
+    // start game again
+    startGame();
+  }
+  void resetGameButton() {
+  // Clear the game board
+  gameBoard = List.generate(
+    colLength,
+    (i) => List.generate(
+      rowLength,
+      (j) => null,
+    ),
+  );
+
+  // Reset game state
+  gameOver = false;
+  currentScore = 0;
+
+  // Create a new piece
+  createNewPiece();
+
+  // Start the game again
+  startGame();
+
+  // Close any existing dialog
+  Navigator.pop(context);
+}
 
   // check for collision in a future position
   // return true -> there is collision
@@ -134,6 +208,17 @@ class _GameBoardState extends State<GameBoard> {
         Tetromino.values[rand.nextInt(Tetromino.values.length)];
     currentPiece = Piece(type: randomType);
     currentPiece.initializePiece();
+
+    /*
+      Since our game cover condition is if there is a piece at the top level,
+      you want to check if the game is over when you create a new piece 
+      instead of checking every frame, because new piece are allowed to go through the top
+      level but if there is already a piece in the top level when the new piece is created,
+      the game is over.
+    */
+    if (isGameOver()) {
+      gameOver = true;
+    }
   }
 
   // moveLeft
@@ -196,9 +281,42 @@ class _GameBoardState extends State<GameBoard> {
     }
   }
 
+  // GAME OVER Function
+  bool isGameOver() {
+    // check if any columns in the top row are filled
+    for (int col = 0; col < rowLength; col++) {
+      if (gameBoard[0][col] != null) {
+        return true;
+      }
+    }
+
+    // if the top row is empty, the game is not over
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Tetris the Game",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              resetGameButton();
+            },
+            icon: const Icon(
+              Icons.restart_alt_rounded,
+              size: 28,
+            ),
+          ),
+        ],
+      ),
       backgroundColor: Colors.black,
       body: Column(
         children: [
@@ -218,7 +336,6 @@ class _GameBoardState extends State<GameBoard> {
                 if (currentPiece.position.contains(index)) {
                   return Pixel(
                     color: currentPiece.color,
-                    child: index,
                   );
                 }
 
@@ -226,14 +343,14 @@ class _GameBoardState extends State<GameBoard> {
                 else if (gameBoard[row][col] != null) {
                   final Tetromino? tetrominoType = gameBoard[row][col];
                   return Pixel(
-                      color: tetrominoColors[tetrominoType], child: '');
+                    color: tetrominoColors[tetrominoType],
+                  );
                 }
 
                 // blank pixel
                 else {
                   return Pixel(
                     color: Colors.grey[900],
-                    child: index,
                   );
                 }
               },
@@ -251,7 +368,7 @@ class _GameBoardState extends State<GameBoard> {
 
           // GAME CONTROLLERS
           Padding(
-            padding: const EdgeInsets.only(bottom: 50.0, top: 20.0),
+            padding: const EdgeInsets.only(bottom: 20.0, top: 5.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
