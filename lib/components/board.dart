@@ -86,7 +86,7 @@ class _GameBoardState extends State<GameBoard> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("GAME OVER"),
+        title: const Text("GAME OVER"),
         content: Text("Your score is : $currentScore"),
         actions: [
           TextButton(
@@ -94,7 +94,7 @@ class _GameBoardState extends State<GameBoard> {
               resetGame();
               Navigator.pop(context);
             },
-            child: Text("Play Again"),
+            child: const Text("Play Again"),
           ),
         ],
       ),

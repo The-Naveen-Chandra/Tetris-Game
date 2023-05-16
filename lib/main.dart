@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tetris_game/components/board.dart';
 import 'package:tetris_game/components/onboarding_screen.dart';
 
 void main() {

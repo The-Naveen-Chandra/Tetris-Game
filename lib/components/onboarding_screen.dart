@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:tetris_game/components/board.dart';
 
 class OnBoardingScreen extends StatelessWidget {
@@ -56,8 +54,8 @@ class OnBoardingScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Center(
-                      child: Container(
+                    const Center(
+                      child: SizedBox(
                         height: 75,
                         child: Icon(
                           Icons.forward,
@@ -69,7 +67,7 @@ class OnBoardingScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Spacer(),
+              const Spacer(),
             ],
           ),
         ),
