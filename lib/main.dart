@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tetris_game/components/board.dart';
+import 'package:tetris_game/components/onboarding_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: GameBoard(),
+      home: const OnBoardingScreen(),
     );
   }
 }
