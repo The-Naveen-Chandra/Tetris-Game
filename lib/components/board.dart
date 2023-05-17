@@ -296,8 +296,20 @@ class _GameBoardState extends State<GameBoard> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        centerTitle: true,
+        centerTitle: false,
         actions: [
+          
+          // DISPLAY SCORE
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Text(
+              "Score: $currentScore",
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+              ),
+            ),
+          ),
           IconButton(
             onPressed: () {
               resetGameButton();
@@ -349,18 +361,9 @@ class _GameBoardState extends State<GameBoard> {
             ),
           ),
 
-          // DISPLAY SCORE
-          Text(
-            "Score: $currentScore",
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-            ),
-          ),
-
           // GAME CONTROLLERS
           Padding(
-            padding: const EdgeInsets.only(bottom: 20.0, top: 5.0),
+            padding: const EdgeInsets.only(bottom: 30.0, top: 5.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
